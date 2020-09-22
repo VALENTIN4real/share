@@ -1,0 +1,7 @@
+index:
+    path: /
+    controller: App\Controller\StaticController::index
+
+contact:
+    path: /contact
+    controller: App\Controller\StaticController::contact
