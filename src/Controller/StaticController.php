@@ -22,7 +22,8 @@ class StaticController extends AbstractController
      * @Route("/contact", name="contact")
      */
     public function contact(Request $request, \Swift_Mailer $mailer){
-        $form = $this->createForm(ContactType::class);
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact);
 
         if($request->isMethod('POST')){
             $form->handleRequest($request);
@@ -36,6 +37,9 @@ class StaticController extends AbstractController
                     ->setBody($this->renderView('email/emails.html.twig', array('name'=>$form->get('name')->getData(), 'subject'=>$form->get('subject')->getData(), 'message'=>$form->get('message')->getData())), 'text/html');
 
                 $mailer->send($message);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($contact);
+                $em->flush();
                 return $this->redirectToRoute('contact');
             }
         }

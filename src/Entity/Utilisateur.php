@@ -44,6 +44,11 @@ class Utilisateur
      */
     private $fichiers;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Telechargement::class, inversedBy="utilisateur")
+     */
+    private $telechargement;
+
     public function __construct()
     {
         $this->fichiers = new ArrayCollection();
@@ -129,6 +134,18 @@ class Utilisateur
                 $fichier->setUtilisateur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTelechargement(): ?Telechargement
+    {
+        return $this->telechargement;
+    }
+
+    public function setTelechargement(?Telechargement $telechargement): self
+    {
+        $this->telechargement = $telechargement;
 
         return $this;
     }

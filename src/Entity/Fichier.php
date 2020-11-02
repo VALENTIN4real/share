@@ -50,9 +50,15 @@ class Fichier
      */
     private $themes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Telechargement::class, mappedBy="fichier")
+     */
+    private $telechargements;
+
     public function __construct()
     {
         $this->themes = new ArrayCollection();
+        $this->telechargements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +147,37 @@ class Fichier
     {
         if ($this->themes->contains($theme)) {
             $this->themes->removeElement($theme);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Telechargement[]
+     */
+    public function getTelechargements(): Collection
+    {
+        return $this->telechargements;
+    }
+
+    public function addTelechargement(Telechargement $telechargement): self
+    {
+        if (!$this->telechargements->contains($telechargement)) {
+            $this->telechargements[] = $telechargement;
+            $telechargement->setFichier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTelechargement(Telechargement $telechargement): self
+    {
+        if ($this->telechargements->contains($telechargement)) {
+            $this->telechargements->removeElement($telechargement);
+            // set the owning side to null (unless already changed)
+            if ($telechargement->getFichier() === $this) {
+                $telechargement->setFichier(null);
+            }
         }
 
         return $this;
